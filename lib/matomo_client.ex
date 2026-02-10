@@ -14,5 +14,6 @@ defmodule MatomoClient do
   """
 
   def track_event() do
+    MatomoClient.Connection.send_request(data)
   end
 end

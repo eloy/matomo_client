@@ -3,7 +3,7 @@ defmodule MatomoClient.Connection do
   @server_url Application.get_env(:matomo_client, :server_url)
   @site_id Application.get_env(:matomo_client, :site_id)
 
-  def request(data) do
+  def send_request(data) do
     uuid = data["uuid"]
     action = data["action"]
 
