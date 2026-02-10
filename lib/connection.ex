@@ -4,8 +4,8 @@ defmodule MatomoClient.Connection do
   @site_id Application.get_env(:matomo_client, :site_id)
 
   def send_request(data) do
-    uuid = data["uuid"]
-    action = data["action"]
+    uuid = data[:uuid]
+    action = data[:action]
 
     params = %{idsite: @site_id, rec: 1, apiv: 1, uid: uuid, action_name: action} |> Map.put(:_id, uuid_to_id(uuid))
     Logger.info("params: #{inspect(params)}")

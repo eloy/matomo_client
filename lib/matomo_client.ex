@@ -13,7 +13,12 @@ defmodule MatomoClient do
 
   """
 
-  def track_event() do
+  def track_event(data) do
     MatomoClient.Connection.send_request(data)
   end
+
+  def track_event_async(data) do
+    Task.start(MatomoClient.Connection, :send_request, [data])
+  end
+
 end
