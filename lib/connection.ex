@@ -8,7 +8,6 @@ defmodule MatomoClient.Connection do
     action = data[:action]
 
     params = %{idsite: @site_id, rec: 1, apiv: 1, uid: uuid, action_name: action} |> Map.put(:_id, uuid_to_id(uuid))
-    Logger.info("params: #{inspect(params)}")
     url_params = Enum.map(Map.keys(params), fn(key) -> "#{key}=#{params[key]}" end) |> Enum.join("&")
 
     url = @server_url <> "/matomo.php?" <> url_params
