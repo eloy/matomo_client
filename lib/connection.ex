@@ -2,11 +2,11 @@ defmodule MatomoClient.Connection do
   require Logger
   @server_url Application.get_env(:matomo_client, :server_url)
   @site_id Application.get_env(:matomo_client, :site_id)
-  @auth_token Application.get_env(:matomo_client, :auth_token)
+  @token_auth Application.get_env(:matomo_client, :token_auth)
 
 
   def send_request(data) do
-    params = %{idsite: @site_id, auth_token: @auth_token, rec: 1, apiv: 1} |> Map.put(:_id, uuid_to_id(data[:uid])) |> Map.merge(data)
+    params = %{idsite: @site_id, token_auth: @token_auth, rec: 1, apiv: 1} |> Map.put(:_id, uuid_to_id(data[:uid])) |> Map.merge(data)
     url = @server_url <> "/matomo.php?" <> URI.encode_query(params)
 
     case :hackney.request(:get, url, headers(), [], [recv_timeout: :infinity]) do
