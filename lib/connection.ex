@@ -7,9 +7,9 @@ defmodule MatomoClient.Connection do
 
   def send_request(data) do
     params = %{idsite: @site_id, token_auth: @token_auth, rec: 1, apiv: 1} |> Map.put(:_id, uuid_to_id(data[:uid])) |> Map.merge(data)
-    url = @server_url <> "/matomo.php?" <> URI.encode_query(params)
-
-    case :hackney.request(:post, url, headers(), [], [recv_timeout: :infinity]) do
+    url = @server_url <> "/matomo.php?"
+    {:ok, encoded_params} = Poison.encode(%{requests: [params]})
+    case :hackney.request(:post, url, headers(), encoded_params, [recv_timeout: :infinity]) do
       {:ok, 200, _headers, ref} ->
         {:ok, body} = :hackney.body(ref)
       {:ok, status, _headers, ref} ->
@@ -26,7 +26,13 @@ defmodule MatomoClient.Connection do
     String.slice(to_string(crc), 0..15)
   end
 
-  def headers, do: []
+    defp headers do
+    [
+      {"Content-Type", "application/json"},
+      {"Accept", "application/json"},
+    ]
+  end
+
 
 
 end
