@@ -9,7 +9,7 @@ defmodule MatomoClient.Connection do
     params = %{idsite: @site_id, token_auth: @token_auth, rec: 1, apiv: 1} |> Map.put(:_id, uuid_to_id(data[:uid])) |> Map.merge(data)
     url = @server_url <> "/matomo.php?" <> URI.encode_query(params)
 
-    case :hackney.request(:get, url, headers(), [], [recv_timeout: :infinity]) do
+    case :hackney.request(:post, url, headers(), [], [recv_timeout: :infinity]) do
       {:ok, 200, _headers, ref} ->
         {:ok, body} = :hackney.body(ref)
       {:ok, status, _headers, ref} ->
