@@ -6,9 +6,10 @@ defmodule MatomoClient.Connection do
 
 
   def send_request(data) do
-    params = %{idsite: @site_id, token_auth: @token_auth, rec: 1, apiv: 1} |> Map.put(:_id, uuid_to_id(data[:uid])) |> Map.merge(data)
+    params = %{idsite: @site_id, rec: 1, apiv: 1} |> Map.put(:_id, uuid_to_id(data[:uid])) |> Map.merge(data)
     url = @server_url <> "/matomo.php?"
-    {:ok, encoded_params} = Poison.encode(%{requests: [params]})
+    {:ok, encoded_params} = Poison.encode(%{requests: [params], token_auth: @token_auth})
+
     case :hackney.request(:post, url, headers(), encoded_params, [recv_timeout: :infinity]) do
       {:ok, 200, _headers, ref} ->
         {:ok, body} = :hackney.body(ref)
